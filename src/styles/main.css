@@ -1,0 +1,9 @@
+body {
+  background-color: #F8FAF9;
+}
+
+.line {
+  width: 100%;
+  height: 3px;
+  border-radius: 3px;
+}
