@@ -1,5 +1,7 @@
+import DataSource from '../../data/data-source';
 import Lines from '../components/Lines';
 import TimeItem from '../components/TimeItem';
+import { createLoading } from '../templates/template-creator';
 
 const Compare = {
   async render() {
@@ -26,22 +28,18 @@ const Compare = {
   },
 
   async afterRender() {
-    const currentTimezoneInfo = {
-      country: 'Indonesia',
-      city: 'Jakarta',
-      date: '18 April 2023',
-      time: '02:11 PM',
-      flagCode: 'id',
-    };
-    const comparedTimezoneInfo = {
-      country: 'Russia',
-      city: 'Moscow',
-      date: '18 April 2023',
-      time: '10:11 AM',
-      flagCode: 'ru',
-    };
     const currentTimezone = document.querySelector('#current-timezone');
     const comparedTimezone = document.querySelector('#compared-timezone');
+
+    currentTimezone.innerHTML = createLoading();
+    comparedTimezone.innerHTML = createLoading();
+
+    const timezones = await DataSource.fetch();
+    const currentTimezoneInfo = timezones[0];
+    const comparedTimezoneInfo = timezones[1];
+
+    currentTimezone.innerHTML = '';
+    comparedTimezone.innerHTML = '';
 
     currentTimezone.innerHTML = TimeItem({
       country: currentTimezoneInfo.country,

@@ -1,5 +1,7 @@
+import DataSource from '../../data/data-source';
 import Lines from '../components/Lines';
 import TimeItem from '../components/TimeItem';
+import { createLoading } from '../templates/template-creator';
 
 const Home = {
   async render() {
@@ -17,37 +19,11 @@ const Home = {
     `;
   },
   async afterRender() {
-    const timeInfo = [
-      {
-        country: 'Indonesia',
-        city: 'Jakarta',
-        date: '18 April 2023',
-        time: '02:11 PM',
-        flagCode: 'id',
-      },
-      {
-        country: 'Russia',
-        city: 'Moscow',
-        date: '18 April 2023',
-        time: '10:11 AM',
-        flagCode: 'ru',
-      },
-      {
-        country: 'Egypt',
-        city: 'Cairo',
-        date: '18 April 2023',
-        time: '09:11 AM',
-        flagCode: 'eg',
-      },
-      {
-        country: 'Singapore',
-        city: 'Singapore',
-        date: '18 April 2023',
-        time: '03:11 PM',
-        flagCode: 'sg',
-      },
-    ];
     const listTimezone = document.querySelector('#list-timezone');
+
+    listTimezone.innerHTML = createLoading();
+    const timeInfo = await DataSource.fetch();
+    listTimezone.innerHTML = '';
     timeInfo.forEach((info, index) => {
       const {
         country, city, date, time, flagCode,
