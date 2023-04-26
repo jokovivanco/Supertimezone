@@ -5,7 +5,7 @@ class DataSource {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(timezones);
-      }, 3000);
+      }, 1500);
     });
   }
 }
