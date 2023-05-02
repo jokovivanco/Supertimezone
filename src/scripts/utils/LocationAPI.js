@@ -14,8 +14,8 @@ const LocationAPI = {
       if (this.isSupported()) {
         navigator.geolocation.getCurrentPosition((position) => {
           resolve({
-            latitude: position?.coords?.latitude,
-            longitude: position?.coords?.longitude,
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
           });
         });
       } else {
