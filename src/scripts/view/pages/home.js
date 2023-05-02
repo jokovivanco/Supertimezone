@@ -8,7 +8,9 @@ const Home = {
   async render() {
     return `
       <div>
-        <div id="map" style="width: 100%; height: 600px;"></div>
+        <div id="map" style="width: 100%; height: 600px;">
+          <div id="popup"></div>
+        </div>
         <div class="py-3">
           <h3 class="text-primary">Current time</h3>
           <div id="current-time"></div>

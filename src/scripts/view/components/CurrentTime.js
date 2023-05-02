@@ -1,51 +1,76 @@
-import { Map, View } from 'ol';
-import TileLayer from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';
-import Feature from 'ol/Feature';
-import Point from 'ol/geom/Point';
-import { Icon, Style } from 'ol/style';
-import VectorLayer from 'ol/layer/Vector';
-import VectorSource from 'ol/source/Vector';
+import { Feature, Map, Overlay, View } from 'ol/index';
+import { OSM, Vector as VectorSource } from 'ol/source';
+import { Point } from 'ol/geom';
+import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
+import { useGeographic } from 'ol/proj';
+
 import LocationAPI from '../../utils/LocationAPI';
 
 import Lines from './Lines';
 
 const CurrentTime = async () => {
   const { latitude, longitude } = await LocationAPI.getLocation();
-  console.log(latitude, longitude);
 
-  const iconFeature = new Feature({
-    geometry: new Point([longitude, latitude]),
-  });
+  useGeographic();
+  const place = [longitude, latitude];
 
-  const iconStyle = new Style({
-    image: new Icon({
-      anchor: [0.5, 46],
-      anchorXUnits: 'fraction',
-      anchorYUnits: 'pixels',
-      src: 'https://openlayers.org/en/latest/examples/data/icon.png',
-      imgSize: [100, 100],
-    }),
-  });
-
-  iconFeature.setStyle(iconStyle);
+  const point = new Point(place);
 
   const map = new Map({
     target: 'map',
+    view: new View({
+      center: place,
+      zoom: 8,
+    }),
     layers: [
       new TileLayer({
         source: new OSM(),
       }),
       new VectorLayer({
         source: new VectorSource({
-          features: [iconFeature],
+          features: [new Feature(point)],
         }),
+        style: {
+          'circle-radius': 9,
+          'circle-fill-color': 'red',
+        },
       }),
     ],
-    view: new View({
-      center: [longitude, latitude],
-      zoom: 10,
-    }),
+  });
+
+  const element = document.getElementById('popup');
+
+  const popup = new Overlay({
+    element,
+    stopEvent: false,
+  });
+  map.addOverlay(popup);
+
+  map.on('moveend', () => {
+    const view = map.getView();
+    view.getCenter();
+  });
+
+  let popover;
+  map.on('click', (event) => {
+    if (popover) {
+      popover.dispose();
+      popover = undefined;
+    }
+    const feature = map.getFeaturesAtPixel(event.pixel)[0];
+    if (!feature) {
+      return;
+    }
+    const coordinate = feature.getGeometry().getCoordinates();
+    popup.setPosition([
+      coordinate[0] + Math.round(event.coordinate[0] / 360) * 360,
+      coordinate[1],
+    ]);
+  });
+
+  map.on('pointermove', (event) => {
+    const type = map.hasFeatureAtPixel(event.pixel) ? 'pointer' : 'inherit';
+    map.getViewport().style.cursor = type;
   });
 
   return `
