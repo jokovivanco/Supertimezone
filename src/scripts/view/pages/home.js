@@ -1,4 +1,5 @@
 import DataSource from '../../data/data-source';
+import TimeZones from '../../utils/TimeZones';
 import CurrentTime from '../components/CurrentTime';
 import TimeItem from '../components/TimeItem';
 import { createLoading } from '../templates/template-creator';
@@ -17,6 +18,10 @@ const Home = {
     `;
   },
   async afterRender() {
+    // testing
+
+    // end testing
+
     const currentTime = document.querySelector('#current-time');
     const listTimezone = document.querySelector('#list-timezone');
 
@@ -24,20 +29,20 @@ const Home = {
     currentTime.innerHTML = await CurrentTime();
 
     listTimezone.innerHTML = createLoading();
-    const timeInfo = await DataSource.fetch();
     listTimezone.innerHTML = '';
-    timeInfo.forEach((info, index) => {
-      const { country, city, date, time, flagCode } = info;
+    const timeZones = TimeZones.randomize();
+    timeZones.forEach((timeZone, index) => {
+      const { country, city, date, time, flagCode } = timeZone;
       listTimezone.innerHTML += `<li>
-        ${TimeItem({
-          country,
-          city,
-          date,
-          time,
-          flagCode,
-          line: index !== timeInfo.length - 1,
-        })}
-      </li>`;
+          ${TimeItem({
+            country,
+            city,
+            date,
+            time,
+            flagCode,
+            line: index !== timeZones.length - 1,
+          })}
+        </li>`;
     });
   },
 };
