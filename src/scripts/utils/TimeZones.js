@@ -12,11 +12,11 @@ const TimeZones = {
   formatZoneDate(objects) {
     return objects.map((object) => {
       let date = object.date.split('/');
-      date[1] = DateConverter.monthToString(date[1]);
-      date = date.join(' ');
+      date[0] = DateConverter.monthToString(date[0]);
+
       return {
         ...object,
-        date,
+        date: `${date[1]} ${date[0]} ${date[2]}`,
       };
     });
   },
