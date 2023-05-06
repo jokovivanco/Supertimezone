@@ -1,4 +1,5 @@
 import momentTimezone from 'moment-timezone/data/meta/latest.json';
+import DateConverter from './DateConverter';
 
 const TimeZones = {
   uniqueByCountry(zones) {
@@ -8,9 +9,20 @@ const TimeZones = {
     ];
     return zonesUniqueByCountry;
   },
+  formatZoneDate(objects) {
+    return objects.map((object) => {
+      let date = object.date.split('/');
+      date[1] = DateConverter.monthToString(date[1]);
+      date = date.join(' ');
+      return {
+        ...object,
+        date,
+      };
+    });
+  },
   zonify(zones) {
     const date = new Date();
-    return this.uniqueByCountry(
+    const uniqueCountries = this.uniqueByCountry(
       zones.map((zone) => {
         const regionNames = new Intl.DisplayNames(['en'], {
           type: 'region',
@@ -29,6 +41,8 @@ const TimeZones = {
         };
       })
     );
+
+    return this.formatZoneDate(uniqueCountries);
   },
   getZones(randomCountries) {
     const zones = [];

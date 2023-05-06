@@ -17,10 +17,6 @@ const Home = {
     `;
   },
   async afterRender() {
-    // testing
-
-    // end testing
-
     const currentTime = document.querySelector('#current-time');
     const listTimezone = document.querySelector('#list-timezone');
 
