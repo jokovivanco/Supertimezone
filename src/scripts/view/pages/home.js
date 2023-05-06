@@ -1,4 +1,3 @@
-import DataSource from '../../data/data-source';
 import TimeZones from '../../utils/TimeZones';
 import CurrentTime from '../components/CurrentTime';
 import TimeItem from '../components/TimeItem';
