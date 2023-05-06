@@ -25,7 +25,7 @@ const Home = {
 
     listTimezone.innerHTML = createLoading();
     listTimezone.innerHTML = '';
-    const timeZones = TimeZones.randomize();
+    const timeZones = TimeZones.randomize(20);
     timeZones.forEach((timeZone, index) => {
       const { country, city, date, time, flagCode } = timeZone;
       listTimezone.innerHTML += `<li>

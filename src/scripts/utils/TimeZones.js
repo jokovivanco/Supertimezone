@@ -60,9 +60,12 @@ const TimeZones = {
     const shuffled = [...array].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, num);
   },
-  randomize() {
+  randomize(count) {
     const countriesArrayObjects = Object.values(momentTimezone.countries);
-    const randomCountries = this.getMultipleRandom(countriesArrayObjects, 10);
+    const randomCountries = this.getMultipleRandom(
+      countriesArrayObjects,
+      count
+    );
     const zones = this.getZones(randomCountries);
     return this.zonify(zones);
   },
